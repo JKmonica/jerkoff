@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿?<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿?<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -30,7 +30,7 @@ canvas{display:block}
 <input id="auth-pass" type="password" placeholder="密码" maxlength="20">
 <div id="auth-err" class="err"></div>
 <button id="auth-login">登录</button>
-<button id="auth-reg">注册</button>
+<button id="auth-reg">注册</button><button id="auth-guest" style="background:#3a3a5a">游客进入</button>
 <div class="tip">已有账号直接登录，新用户点击注册</div>
 </div>
 </div>
@@ -68,7 +68,7 @@ function apiSaveScore(u,s){return sbFetch("scores","PATCH",{score:s},"?username=
 // ---- 认证 ----
 var authPanel=document.getElementById("auth-panel"),authUser=document.getElementById("auth-user");
 var authPass=document.getElementById("auth-pass"),authErr=document.getElementById("auth-err");
-var loginBtn=document.getElementById("auth-login"),regBtn=document.getElementById("auth-reg");
+var loginBtn=document.getElementById("auth-login"),regBtn=document.getElementById("auth-reg"),guestBtn=document.getElementById("auth-guest");
 
 function setL(v){loadingAuth=v;loginBtn.disabled=v;regBtn.disabled=v;loginBtn.style.opacity=v?".6":"1";regBtn.style.opacity=v?".6":"1"}
 function doLogin(){
@@ -86,8 +86,8 @@ function doReg(){
   apiRegister(u,p).then(function(){authErr.textContent="注册成功！";authErr.style.color="#4c4";setTimeout(function(){authErr.style.color="#f44";authErr.textContent="";setL(false)},1200)})
   .catch(function(e){var m=e.message;if(m.indexOf("duplicate")>=0||m.indexOf("unique")>=0)m="用户已存在";authErr.textContent=m;authErr.style.color="#f44";setL(false)});
 }
-function authOk(u){un=u;sc=0;authPanel.classList.add("hidden");gs=S.MENU;resize();fetchRank();apiGetScore(u).then(function(s){hs=s})}
-loginBtn.addEventListener("click",function(){initAudio();doLogin()});regBtn.addEventListener("click",function(){initAudio();doReg()});
+function authOk(u){un=u;sc=0;authPanel.classList.add("hidden");gs=S.MENU;resize();fetchRank();apiGetScore(u).then(function(s){hs=s})}function doGuest(){un="游客"+Math.floor(Math.random()*1000);authPanel.classList.add("hidden");gs=S.MENU;resize();initAudio()}
+loginBtn.addEventListener("click",function(){initAudio();doLogin()});regBtn.addEventListener("click",function(){initAudio();doReg()});guestBtn.addEventListener("click",function(){initAudio();doGuest()});
 authUser.addEventListener("keydown",function(e){if(e.key==="Enter")authPass.focus()});
 authPass.addEventListener("keydown",function(e){if(e.key==="Enter")doLogin()});
 
